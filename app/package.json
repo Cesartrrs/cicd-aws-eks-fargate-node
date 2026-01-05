@@ -1,0 +1,16 @@
+{
+  "name": "cicd-node-app",
+  "version": "1.0.0",
+  "description": "Simple Node.js app for CI/CD with AWS EKS Fargate",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
