@@ -1,0 +1,50 @@
+name: CD - Deploy to ECS (Terraform)
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "ECR tag to deploy (e.g., latest or sha-<commit>)"
+        required: true
+        default: "latest"
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform Init
+        working-directory: infra/terraform/envs/dev
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: infra/terraform/envs/dev
+        run: terraform validate
+
+      - name: Terraform Plan (Deploy image tag)
+        working-directory: infra/terraform/envs/dev
+        run: terraform plan -var="image_tag=${{ github.event.inputs.image_tag }}"
+
+      - name: Terraform Apply (Deploy)
+        working-directory: infra/terraform/envs/dev
+        run: terraform apply -auto-approve -var="image_tag=${{ github.event.inputs.image_tag }}"
