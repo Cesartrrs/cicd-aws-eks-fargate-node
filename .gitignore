@@ -1,3 +1,8 @@
 =======
 *tfstate*
 >>>>>>> 1b65032 (agregar notas a vpc)
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.crash.log
