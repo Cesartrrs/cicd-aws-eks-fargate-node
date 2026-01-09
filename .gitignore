@@ -1,6 +1,3 @@
-node_modules
-.env
-**/.terraform/*
-**/*.tfstate
-**/*.tfstate.*
-.aws-arns.txt
+=======
+*tfstate*
+>>>>>>> 1b65032 (agregar notas a vpc)
